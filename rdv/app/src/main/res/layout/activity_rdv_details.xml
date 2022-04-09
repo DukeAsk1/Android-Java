@@ -83,7 +83,7 @@
             <Button
                 android:id="@+id/btnPickContact"
                 android:layout_weight="1"
-                android:layout_width="150dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:onClick="pickContact"
                 android:icon="@drawable/contact"/>
@@ -177,6 +177,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:layout_column="0"
                 android:id="@+id/textView3"
                 android:layout_weight="5"
                 android:layout_width="wrap_content"
@@ -184,6 +185,7 @@
                 android:text="@string/lblTime" />
 
             <EditText
+                android:layout_column="1"
                 android:id="@+id/etTime"
                 android:layout_weight="0"
                 android:layout_width="wrap_content"
@@ -193,6 +195,7 @@
                 android:inputType="time"/>
 
             <Button
+                android:layout_column="2"
                 android:id="@+id/btnPickTime"
                 android:layout_weight="3"
                 android:onClick="pickTime"
@@ -257,29 +260,26 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_column="1"
-                android:layout_marginLeft="25dp"
-                android:orientation="horizontal">
+
 
                 <Button
+                    android:layout_column="0"
                     android:id="@+id/btnSave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
+                    android:layout_gravity="right"
                     android:onClick="saveMoment"
                     android:text="@string/btnSave" />
 
                 <Button
+                    android:layout_column="1"
                     android:id="@+id/btnCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:onClick="onCancelClick"
                     android:text="@string/btnCancel" />
-            </LinearLayout>
+
         </TableRow>
     </TableLayout>
 
