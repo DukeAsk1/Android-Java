@@ -74,6 +74,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void delete(long _id)
+    {
+        database.delete(TABLE_NAME, _ID + "=" + _id, null);
+    }
+
     public int update(Moment moment) {
         Long _id= moment.getId();
         ContentValues contentValues = new ContentValues();
@@ -88,10 +93,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COMMENTS,moment.getComments());
         int count = database.update(TABLE_NAME, contentValues, this._ID + " = " + _id, null);
         return count;
-    }
-    public void delete(long _id)
-    {
-        database.delete(TABLE_NAME, _ID + "=" + _id, null);
     }
 
     public Cursor getAllMoments(){

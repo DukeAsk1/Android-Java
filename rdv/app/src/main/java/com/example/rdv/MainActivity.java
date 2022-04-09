@@ -38,8 +38,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-    ListView lvMoments;
-    private DatabaseHelper myHelper;
+    ListView lvMoments; // list of existing events
+    private DatabaseHelper myHelper; // database
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         lvMoments.setEmptyView(findViewById(R.id.tvEmpty));
         chargeData();
         registerForContextMenu(lvMoments);
-
 
         lvMoments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -76,12 +75,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+//////////////// Menu ////////////////
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.rdv_menu,menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
@@ -100,18 +103,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void chargeData(){
-        final String[] from = new String[]{DatabaseHelper._ID, DatabaseHelper.CATEGORY,
-                DatabaseHelper.TITLE, DatabaseHelper.CONTACT,DatabaseHelper.NUM,DatabaseHelper.LOCATION,
-                DatabaseHelper.MDATE, DatabaseHelper.MTIME, DatabaseHelper.REMINDER, DatabaseHelper.COMMENTS};
-        final int[]to= new int[]{R.id.idMoment,R.id.category, R.id.title,R.id.tvContact,R.id.tvNum,R.id.tvLocation,
-                R.id.tvDate,R.id.tvTime, R.id.tvReminder,R.id.comments};
-
-        Cursor c = myHelper.getAllMoments();
-        SimpleCursorAdapter adapter= new SimpleCursorAdapter(this,R.layout.rdv_item_menu,c,from,to,0);
-        adapter.notifyDataSetChanged();
-        lvMoments.setAdapter(adapter);
-    }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -122,8 +113,6 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("ResourceType")
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-
-
         AdapterView.AdapterContextMenuInfo info= (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 
         if (item.getItemId()==R.id.delete){
@@ -152,75 +141,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+/////////////// Data //////////////////
 
+    public void chargeData(){
+        final String[] from = new String[]{DatabaseHelper._ID, DatabaseHelper.CATEGORY,
+                DatabaseHelper.TITLE, DatabaseHelper.CONTACT,DatabaseHelper.NUM,DatabaseHelper.LOCATION,
+                DatabaseHelper.MDATE, DatabaseHelper.MTIME, DatabaseHelper.REMINDER, DatabaseHelper.COMMENTS};
+        final int[]to= new int[]{R.id.idMoment,R.id.category, R.id.title,R.id.tvContact,R.id.tvNum,R.id.tvLocation,
+                R.id.tvDate,R.id.tvTime, R.id.tvReminder,R.id.comments};
 
-
-
-/*
-
-    public void pickTime(View view){
-        showTimePicker();
+        Cursor c = myHelper.getAllMoments();
+        SimpleCursorAdapter adapter= new SimpleCursorAdapter(this,R.layout.rdv_item_menu,c,from,to,0);
+        adapter.notifyDataSetChanged();
+        lvMoments.setAdapter(adapter);
     }
 
-    TimePickerDialog.OnTimeSetListener onTime = new TimePickerDialog.OnTimeSetListener() {
-
-        @Override
-        public void onTimeSet(TimePicker timePicker, int i, int i1) {
-            hours = i;
-            minutes = i1;
-
-            etTime.setText(new StringBuilder().append(hours).append(":").append(minutes));
-        }
-    };
-
-    private void showTimePicker() {
-
-        com.example.rdv.TimePickerFragment time= new com.example.rdv.TimePickerFragment();
-
-        final Calendar c = Calendar.getInstance();
-        int hours = c.get(Calendar.HOUR_OF_DAY);
-        int minutes = c.get(Calendar.MINUTE);
-
-        Bundle args = new Bundle();
-        args.putInt("hours",hours);
-        args.putInt("minutes",minutes);
-
-        time.setArguments(args);
-        time.setCallBack(onTime);
-        time.show(getSupportFragmentManager(),"Time Picker");
-    }
-
-
-    public void pickDate(View view){
-        showDatePicker();
-    }
-
-    DatePickerDialog.OnDateSetListener onDate = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
-        {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-            etDate.setText(new StringBuilder().append(month +1).
-                    append("-").append(day).append("-").append(year).append(" "));
-        }
-    };
-
-    private void showDatePicker() {
-        com.example.rdv.DatePickerFragment date= new com.example.rdv.DatePickerFragment();
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-        Bundle args = new Bundle();
-        args.putInt("year",year);
-        args.putInt("month",month);
-        args.putInt("day",day);
-        date.setArguments(args);
-        date.setCallBack(onDate);
-        date.show(getSupportFragmentManager(),"Date Picker");
-    }
-*/
 
 }

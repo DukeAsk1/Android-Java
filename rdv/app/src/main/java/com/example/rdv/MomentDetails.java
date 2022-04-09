@@ -33,7 +33,10 @@ import androidx.loader.app.LoaderManager;
 import java.util.Calendar;
 
 public class MomentDetails extends AppCompatActivity  {
+    // Database
     private DatabaseHelper myHelper;
+
+    // Events attributes
     private EditText etTitle;
     private EditText etContact;
     private EditText etNum;
@@ -44,13 +47,35 @@ public class MomentDetails extends AppCompatActivity  {
     private EditText etComments;
     private TextView tvId;
     private Spinner spCategory;
+
+    // From add button or not
     private Boolean fromAdd;
 
-
+    // time and date pickers
     int hours, minutes;
     int year,month,day;
-    //EditText etDate;
-    //EditText etTime;
+    TimePickerDialog.OnTimeSetListener onTime = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int i, int i1) {
+            hours = i;
+            minutes = i1;
+            etTime.setText(new StringBuilder().append(hours).append(":").append(minutes));
+        }
+    };
+    DatePickerDialog.OnDateSetListener onDate = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
+        {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+            etDate.setText(new StringBuilder().append(month +1).
+                    append("-").append(day).append("-").append(year).append(" "));
+        }
+    };
+
+
+    // buttons
     Button btnPickTime;
     Button btnPickDate;
     Button btnPickContact;
@@ -116,12 +141,89 @@ public class MomentDetails extends AppCompatActivity  {
 
         btnPickLocation = (Button) findViewById(R.id.btnPickLocation);
 
-        requestPermissions();
-    }
-    public void onCancelClick(View v) {
-        finish();
+        requestReadContactPermissions(); // request for permissions
     }
 
+
+
+    private static final int WRITE_CALENDAR_PERMISSION_CODE = 62;
+
+    private static final int CONTACT_PERMISSION_CODE = 1;
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    Uri contactData= data.getData();
+                    Cursor c = getContentResolver().query(contactData, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        TextView tvName= findViewById(R.id.etContact);
+                        String name = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                        tvName.setText(name);
+                    }
+                }
+            });
+
+
+    ////////////////// BUTTONS /////////////////////
+
+    // pick a contact
+    public void pickContact(View v) {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        //startActivityForResult(intent, CONTACT_PICK_CODE);
+        someActivityResultLauncher.launch(intent);
+    }
+
+    // pick a date
+    public void pickDate(View view){
+        showDatePicker();
+    }
+    private void showDatePicker() {
+        com.example.rdv.DatePickerFragment date= new com.example.rdv.DatePickerFragment();
+        final Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        Bundle args = new Bundle();
+        args.putInt("year",year);
+        args.putInt("month",month);
+        args.putInt("day",day);
+        date.setArguments(args);
+        date.setCallBack(onDate);
+        date.show(getSupportFragmentManager(),"Date Picker");
+    }
+
+    // pick a time
+    public void pickTime(View view){
+        showTimePicker();
+    }
+    private void showTimePicker() {
+
+        com.example.rdv.TimePickerFragment time= new com.example.rdv.TimePickerFragment();
+
+        final Calendar c = Calendar.getInstance();
+        int hours = c.get(Calendar.HOUR_OF_DAY);
+        int minutes = c.get(Calendar.MINUTE);
+
+        Bundle args = new Bundle();
+        args.putInt("hours",hours);
+        args.putInt("minutes",minutes);
+
+        time.setArguments(args);
+        time.setCallBack(onTime);
+        time.show(getSupportFragmentManager(),"Time Picker");
+    }
+
+    // choose a location
+    public void launchMaps(View view) {
+        String map = "http://maps.google.co.in/maps?q=" + etLocation.getText() ;
+        Uri gmmIntentUri = Uri.parse(map);
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        startActivity(mapIntent);
+
+    }
+
+    // save event
     public void saveMoment(View view) {
         String category = spCategory.getSelectedItem().toString();
         String title= etTitle.getText().toString();
@@ -149,99 +251,15 @@ public class MomentDetails extends AppCompatActivity  {
         }
     }
 
-
-
-    public void pickTime(View view){
-        showTimePicker();
-    }
-
-    TimePickerDialog.OnTimeSetListener onTime = new TimePickerDialog.OnTimeSetListener() {
-
-        @Override
-        public void onTimeSet(TimePicker timePicker, int i, int i1) {
-            hours = i;
-            minutes = i1;
-
-            etTime.setText(new StringBuilder().append(hours).append(":").append(minutes));
-        }
-    };
-
-    private void showTimePicker() {
-
-        com.example.rdv.TimePickerFragment time= new com.example.rdv.TimePickerFragment();
-
-        final Calendar c = Calendar.getInstance();
-        int hours = c.get(Calendar.HOUR_OF_DAY);
-        int minutes = c.get(Calendar.MINUTE);
-
-        Bundle args = new Bundle();
-        args.putInt("hours",hours);
-        args.putInt("minutes",minutes);
-
-        time.setArguments(args);
-        time.setCallBack(onTime);
-        time.show(getSupportFragmentManager(),"Time Picker");
+    // cancel event
+    public void onCancelClick(View v) {
+        finish();
     }
 
 
-    public void pickDate(View view){
-        showDatePicker();
-    }
+    ////////////////// PERMISSIONS /////////////////////
 
-    DatePickerDialog.OnDateSetListener onDate = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay)
-        {
-            year = selectedYear;
-            month = selectedMonth;
-            day = selectedDay;
-            etDate.setText(new StringBuilder().append(month +1).
-                    append("-").append(day).append("-").append(year).append(" "));
-        }
-    };
-
-    private void showDatePicker() {
-        com.example.rdv.DatePickerFragment date= new com.example.rdv.DatePickerFragment();
-        final Calendar c = Calendar.getInstance();
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-        Bundle args = new Bundle();
-        args.putInt("year",year);
-        args.putInt("month",month);
-        args.putInt("day",day);
-        date.setArguments(args);
-        date.setCallBack(onDate);
-        date.show(getSupportFragmentManager(),"Date Picker");
-    }
-
-    private static final int WRITE_CALENDAR_PERMISSION_CODE = 62;
-
-    private static final int CONTACT_PERMISSION_CODE = 1;
-    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    Uri contactData= data.getData();
-                    Cursor c = getContentResolver().query(contactData, null, null, null, null);
-                    if (c.moveToFirst()) {
-                        TextView tvName= findViewById(R.id.etContact);
-                        String name = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
-                        tvName.setText(name);
-                    }
-                }
-            });
-
-
-    public void pickContact(View v) {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        //startActivityForResult(intent, CONTACT_PICK_CODE);
-        someActivityResultLauncher.launch(intent);
-    }
-
-
-    public void requestPermissions()
+    public void requestReadContactPermissions()
     {
 
         // READ CONTACTS PERMISSION
@@ -253,6 +271,11 @@ public class MomentDetails extends AppCompatActivity  {
                     {Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
         }
 
+
+    }
+
+    public void requestWriteCalendarPermissions()
+    {
         // WRITE CALENDAR PERMISSION
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) !=
                 PackageManager.PERMISSION_GRANTED)
@@ -263,7 +286,6 @@ public class MomentDetails extends AppCompatActivity  {
         }
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -273,6 +295,9 @@ public class MomentDetails extends AppCompatActivity  {
                 if (grantResults.length >0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
                     Toast.makeText(this, "Permission denied...", Toast.LENGTH_SHORT).show();
                 }
+                else{
+                    requestWriteCalendarPermissions();
+                }
             }
 
             case WRITE_CALENDAR_PERMISSION_CODE:{
@@ -281,15 +306,6 @@ public class MomentDetails extends AppCompatActivity  {
                 }
             }
         }
-    }
-
-
-    public void launchMaps(View view) {
-        String map = "http://maps.google.co.in/maps?q=" + etLocation.getText() ;
-        Uri gmmIntentUri = Uri.parse(map);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        startActivity(mapIntent);
-
     }
 
 
