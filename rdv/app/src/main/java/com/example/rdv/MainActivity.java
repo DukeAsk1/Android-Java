@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -118,13 +119,33 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.context_menu,menu);
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+
+
         AdapterView.AdapterContextMenuInfo info= (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
 
         if (item.getItemId()==R.id.delete){
             myHelper.delete(info.id);
             chargeData();
+            return true;
+        }
+        if (item.getItemId()==R.id.share){
+            final ListView lv = (ListView) findViewById(R.id.lvMoments);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> myAdapter, View myView, int pos, long mylng) {
+                    String selectedFromList =(lv.getItemAtPosition(pos).toString());
+                    // this is your selected item
+                    }
+            });
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.id.item_menu));
+            sendIntent.setType("text/plain");
+            //startActivity(sendIntent);
+            startActivity(Intent.createChooser(sendIntent, "Share App"));
             return true;
         }
         return super.onContextItemSelected(item);
