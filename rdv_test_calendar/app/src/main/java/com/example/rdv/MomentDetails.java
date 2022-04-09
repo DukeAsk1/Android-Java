@@ -1,7 +1,5 @@
 package com.example.rdv;
 
-import static java.security.AccessController.getContext;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -28,11 +26,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.loader.app.LoaderManager;
 
 import java.util.Calendar;
 
-public class MomentDetails extends AppCompatActivity  {
+public class MomentDetails extends AppCompatActivity {
     private DatabaseHelper myHelper;
     private EditText etTitle;
     private EditText etContact;
@@ -59,7 +56,6 @@ public class MomentDetails extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_rdv_details);
         etTitle = (EditText) findViewById(R.id.etTitle);
         etContact = (EditText) findViewById(R.id.etContact);
@@ -115,8 +111,6 @@ public class MomentDetails extends AppCompatActivity  {
         etContact = (EditText) findViewById(R.id.etContact);
 
         btnPickLocation = (Button) findViewById(R.id.btnPickLocation);
-
-        requestPermissions();
     }
     public void onCancelClick(View v) {
         finish();
@@ -148,9 +142,6 @@ public class MomentDetails extends AppCompatActivity  {
             startActivity(main);
         }
     }
-
-
-
     public void pickTime(View view){
         showTimePicker();
     }
@@ -215,8 +206,7 @@ public class MomentDetails extends AppCompatActivity  {
         date.show(getSupportFragmentManager(),"Date Picker");
     }
 
-    private static final int WRITE_CALENDAR_PERMISSION_CODE = 62;
-
+    static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 62;
     private static final int CONTACT_PERMISSION_CODE = 1;
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -235,34 +225,17 @@ public class MomentDetails extends AppCompatActivity  {
 
 
     public void pickContact(View v) {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        //startActivityForResult(intent, CONTACT_PICK_CODE);
-        someActivityResultLauncher.launch(intent);
-    }
-
-
-    public void requestPermissions()
-    {
-
-        // READ CONTACTS PERMISSION
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) !=
-                PackageManager.PERMISSION_GRANTED)
-        {
-            // No explanation needed, we can request the permission.
-            ActivityCompat.requestPermissions(this, new String[]
-                    {Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
-        }
-
-        // WRITE CALENDAR PERMISSION
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) !=
-                PackageManager.PERMISSION_GRANTED)
-        {
-            // No explanation needed, we can request the permission.
-            ActivityCompat.requestPermissions(this, new String[]
-                    {Manifest.permission.WRITE_CALENDAR}, WRITE_CALENDAR_PERMISSION_CODE);
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},
+                    CONTACT_PERMISSION_CODE);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            //startActivityForResult(intent, CONTACT_PICK_CODE);
+            someActivityResultLauncher.launch(intent);
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -270,19 +243,16 @@ public class MomentDetails extends AppCompatActivity  {
         switch (requestCode) {
 
             case CONTACT_PERMISSION_CODE:{
-                if (grantResults.length >0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this, "Permission denied...", Toast.LENGTH_SHORT).show();
+                if (grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    someActivityResultLauncher.launch(intent);
                 }
-            }
-
-            case WRITE_CALENDAR_PERMISSION_CODE:{
-                if (grantResults.length >0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                else {
                     Toast.makeText(this, "Permission denied...", Toast.LENGTH_SHORT).show();
                 }
             }
         }
     }
-
 
     public void launchMaps(View view) {
         String map = "http://maps.google.co.in/maps?q=" + etLocation.getText() ;
