@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">RDV Manager</string>
+    <string name="TvNoItems">Aucun RDV programmé</string>
+    <string name="lblCategory">Catégorie</string>
+    <string name="lblTitle">Titre</string>
+    <string name="lblContact">Contact</string>
+    <string name="lblNumber">Numéro de Téléphone</string>
+    <string name="lblLocation">Adresse/Lieu</string>
+    <string name="lblDate">Date</string>
+    <string name="lblTime">Heure</string>
+    <string name="lblReminder">Rappel du RDV</string>
+    <string name="lblComments">Détails</string>
+    <string name="btnSave">Sauvegarder</string>
+    <string name="btnCancel">Annuler</string>
+    <string-array name="spinner">
+        <item>Médical</item>
+        <item>Réunion</item>
+        <item>Personnel</item>
+        <item>Sport</item>
+    </string-array>
+    <string-array name="reminder">
+        <item>1 jour avant</item>
+        <item>2 jours avant</item>
+        <item>1 semaine avant</item>
+    </string-array>
+</resources>

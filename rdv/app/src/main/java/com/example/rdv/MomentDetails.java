@@ -9,6 +9,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -76,16 +78,17 @@ public class MomentDetails extends AppCompatActivity  {
 
 
     // buttons
-    Button btnPickTime;
-    Button btnPickDate;
-    Button btnPickContact;
-    Button btnPickLocation;
+    ImageButton btnPickTime;
+    ImageButton btnPickDate;
+    ImageButton btnPickContact;
+    ImageButton btnPickLocation;
+    ImageButton btnCallNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_rdv_details);
+        setContentView(R.layout.test_multiple_table);
         etTitle = (EditText) findViewById(R.id.etTitle);
         etContact = (EditText) findViewById(R.id.etContact);
         etNum = (EditText) findViewById(R.id.etNum);
@@ -118,7 +121,7 @@ public class MomentDetails extends AppCompatActivity  {
         if(!fromAdd){
             Bundle b= intent.getExtras();
             Moment selectedMoment= b.getParcelable("SelectedMoment");
-            tvId.setText(String.valueOf(selectedMoment.getId()));
+            //tvId.setText(String.valueOf(selectedMoment.getId()));
             spCategory.setSelection(adapter.getPosition(selectedMoment.getCategory()));
             etTitle.setText(selectedMoment.getTitle());
             etContact.setText(selectedMoment.getContact());
@@ -130,16 +133,20 @@ public class MomentDetails extends AppCompatActivity  {
             etComments.setText(selectedMoment.getComments());
         }
 
-        btnPickDate=(Button)findViewById(R.id.btnPickDate);
+        btnPickDate=(ImageButton)findViewById(R.id.btnPickDate);
         etDate= (EditText) findViewById(R.id.etDate);
 
-        btnPickTime=(Button)findViewById(R.id.btnPickTime);
+        btnPickTime=(ImageButton) findViewById(R.id.btnPickTime);
         etTime= (EditText) findViewById(R.id.etTime);
 
-        btnPickContact = (Button)findViewById(R.id.btnPickContact);
+        btnPickContact = (ImageButton)findViewById(R.id.btnPickContact);
         etContact = (EditText) findViewById(R.id.etContact);
 
-        btnPickLocation = (Button) findViewById(R.id.btnPickLocation);
+        btnPickLocation = (ImageButton) findViewById(R.id.btnPickLocation);
+
+        btnCallNumber = (ImageButton) findViewById(R.id.btnCallNumber);
+        etNum = (EditText) findViewById(R.id.etNum);
+
 
         requestReadContactPermissions(); // request for permissions
     }
@@ -147,7 +154,7 @@ public class MomentDetails extends AppCompatActivity  {
 
 
     private static final int WRITE_CALENDAR_PERMISSION_CODE = 62;
-
+    private static final int PHONE_PERMISSION_CODE = 30;
     private static final int CONTACT_PERMISSION_CODE = 1;
     ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -222,6 +229,29 @@ public class MomentDetails extends AppCompatActivity  {
         startActivity(mapIntent);
 
     }
+    // call a phone number
+    public void callNumber(View arg)
+    {
+
+        // getting phone number from edit text
+        // and changing it to String
+        String phone_number
+                = etNum.getText().toString();
+
+        // Getting instance of Intent
+        // with action as ACTION_CALL
+        Intent phone_intent
+                = new Intent(Intent.ACTION_CALL);
+
+        // Set data of Intent through Uri
+        // by parsing phone number
+        phone_intent
+                .setData(Uri.parse("tel:"
+                        + phone_number));
+
+        // start Intent
+        startActivity(phone_intent);
+    }
 
     // save event
     public void saveMoment(View view) {
@@ -286,6 +316,21 @@ public class MomentDetails extends AppCompatActivity  {
         }
     }
 
+    public void requestCallPhonePermissions()
+    {
+
+        // CALL PHONE PERMISSION
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) !=
+                PackageManager.PERMISSION_GRANTED)
+        {
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(this, new String[]
+                    {Manifest.permission.CALL_PHONE}, PHONE_PERMISSION_CODE);
+        }
+
+
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -305,8 +350,18 @@ public class MomentDetails extends AppCompatActivity  {
                     Toast.makeText(this, "Permission denied...", Toast.LENGTH_SHORT).show();
                 }
             }
+
+            case PHONE_PERMISSION_CODE:{
+                if (grantResults.length >0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Permission denied...", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    requestCallPhonePermissions();
+                }
+            }
         }
     }
+
 
 
 }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
 
 
@@ -25,7 +26,7 @@
             <TextView
                 android:id="@+id/tvCategory"
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="@string/lblCategory" />
 
@@ -59,122 +60,155 @@
                 android:ems="10"
                 android:inputType="textPersonName" />
         </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tvContact"
-                android:layout_width="25dp"
+                android:layout_weight="1"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/etTitle"
                 android:text="@string/lblContact" />
 
             <EditText
                 android:id="@+id/etContact"
-                android:layout_width="50dp"
+                android:layout_weight="1"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:autofillHints="Enter value"
                 android:ems="10"
                 android:inputType="textPersonName" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnPickContact"
                 android:layout_weight="1"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
                 android:onClick="pickContact"
-                android:icon="@drawable/contact"/>
+                android:background="@drawable/roundcorner"
+                android:src="@drawable/contact"/>
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tvNum"
                 android:layout_weight="1"
-                android:layout_width="200dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/etTitle"
                 android:text="@string/lblNumber" />
 
             <EditText
                 android:id="@+id/etNum"
-                android:layout_width="286dp"
-                android:layout_weight="0.5"
+                android:layout_width="20dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:autofillHints="Enter value"
                 android:ems="10"
                 android:inputType="textPersonName" />
+            <ImageButton
+                android:id="@+id/btnCallNumber"
+                android:layout_weight="1"
+                android:onClick="callNumber"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:background="@drawable/roundcorner"
+                android:src="@drawable/phone"/>
         </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
 
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tvLocation"
+                android:layout_width="100dp"
                 android:layout_weight="1"
-                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/etTitle"
                 android:text="@string/lblLocation" />
 
             <EditText
                 android:id="@+id/etLocation"
-                android:layout_width="286dp"
-                android:layout_weight="0.5"
+                android:layout_width="20dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:autofillHints="Enter value"
                 android:ems="10"
                 android:inputType="textPersonName" />
-            <Button
+            <ImageButton
                 android:id="@+id/btnPickLocation"
-                android:layout_weight="3"
+                android:layout_weight="1"
                 android:onClick="launchMaps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/gmaps"/>
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:background="@drawable/roundcorner"
+                android:src="@drawable/gmaps"/>
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_weight="2"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="@string/lblDate" />
 
             <EditText
                 android:id="@+id/etDate"
-                android:layout_width="10dp"
-                android:layout_weight="0.5"
+                android:layout_weight="0"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="25dp"
                 android:ems="10"
                 android:inputType="datetime"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnPickDate"
-                android:layout_weight="0.5"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
                 android:onClick="pickDate"
-                android:icon="@drawable/calendar"/>
+                android:background="@color/purple_500"
+                android:src="@drawable/calendar"/>
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <TextView
@@ -195,91 +229,107 @@
                 android:ems="10"
                 android:inputType="time"/>
 
-            <Button
+            <ImageButton
                 android:layout_column="2"
                 android:id="@+id/btnPickTime"
                 android:layout_weight="3"
                 android:onClick="pickTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/clock"/>
+                android:layout_height="40dp"
+                android:background="@drawable/roundcorner"
+                android:src="@drawable/clock"/>
         </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tvReminder"
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:text="@string/lblReminder" />
 
             <Spinner
-            android:id="@+id/spReminder"
-            android:layout_weight="0.5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp" />
+                android:id="@+id/spReminder"
+                android:layout_weight="1"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp" />
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tvComments"
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:text="@string/lblComments" />
 
             <EditText
                 android:id="@+id/etComments"
-                android:layout_weight="0.5"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:ems="10"
                 android:inputType="textMultiLine" />
         </TableRow>
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:stretchColumns="0"
+            android:shrinkColumns="0">
 
-            <TextView
-                android:id="@+id/tvId"
-                android:layout_width="wrap_content"
+
+
+            <Button
+                android:layout_column="0"
+                android:id="@+id/btnSave"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:visibility="invisible" />
-        </TableRow>
+                android:layout_marginRight="5dp"
+                android:onClick="saveMoment"
+                android:text="@string/btnSave" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-
-
-                <Button
-                    android:layout_column="0"
-                    android:id="@+id/btnSave"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:onClick="saveMoment"
-                    android:text="@string/btnSave" />
-
-                <Button
-                    android:layout_column="1"
-                    android:id="@+id/btnCancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:onClick="onCancelClick"
-                    android:text="@string/btnCancel" />
+            <Button
+                android:layout_column="1"
+                android:id="@+id/btnCancel"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:onClick="onCancelClick"
+                android:text="@string/btnCancel" />
 
         </TableRow>
     </TableLayout>
@@ -290,4 +340,4 @@
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

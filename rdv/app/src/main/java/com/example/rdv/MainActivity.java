@@ -11,7 +11,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.SearchManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -24,10 +26,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -40,6 +44,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
     ListView lvMoments; // list of existing events
     private DatabaseHelper myHelper; // database
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +87,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.rdv_menu,menu);
+
+        /*// Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default*/
+
         return true;
+
+
     }
 
     @Override

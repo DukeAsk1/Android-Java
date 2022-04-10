@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">PreciousMoments</string>
-    <string name="TvNoItems">No Item Found</string>
+    <string name="app_name">RDV Manager</string>
+    <string name="TvNoItems">No RDV scheduled</string>
     <string name="lblCategory">Category</string>
     <string name="lblTitle">Title</string>
     <string name="lblContact">Contact</string>

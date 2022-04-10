@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/new_moment"
-        android:title="Add"
+        android:title="Ajouter"
         android:icon="@drawable/new_moment_icon"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/search"
-        android:title="Search"
-        app:actionViewClass="android.widget.SearchView" />
+        android:title="Rechercher"/>
 </menu>
