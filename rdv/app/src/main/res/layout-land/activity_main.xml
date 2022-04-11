@@ -17,20 +17,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lvMoments"
         app:layout_constraintVertical_bias="1.0" />
 
-    <fragment
-        android:id="@+id/detailsFragment"
-        class="com.example.rdv.RdvDetailsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></fragment>
+    <ScrollView
+        android:layout_width="500dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+        <fragment
+            android:id="@+id/detailsFragment"
+            class="com.example.rdv.RdvDetailsFragment"
+            android:layout_width="500dp"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"></fragment>
 
+    </ScrollView>
     <ListView
         android:id="@+id/lvMoments"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        android:textSize="2dp"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
