@@ -1,27 +1,42 @@
 package com.example.rdv;
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     ListView lvMoments; // list of existing events
@@ -31,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int WRITE_CALENDAR_PERMISSION_CODE = 62;
     private static final int PHONE_PERMISSION_CODE = 30;
     private static final int CONTACT_PERMISSION_CODE = 1;
+
+    // notifications
+    static String CHANNEL_ID= "channel_notif";
+    static int NOTIFICATION_ID=100;
+    static int REQUEST_CODE= 200;
 
 
     @Override
@@ -75,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         requestReadContactPermissions(); // request for permissions
+        createNotificationChannel(); // create a notification channel
     }
 
 
@@ -174,6 +195,14 @@ public class MainActivity extends AppCompatActivity {
         SimpleCursorAdapter adapter= new SimpleCursorAdapter(this,R.layout.rdv_item_menu,c,from,to,0);
         adapter.notifyDataSetChanged();
         lvMoments.setAdapter(adapter);
+        /*
+        try {
+            compareTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+         */
     }
 
     ////////////////// PERMISSIONS /////////////////////
@@ -251,6 +280,58 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //////////////// NOTIFICATIONS //////////////////
+    private void createNotificationChannel() {
+        // Create a NotificationChannel, only for API 26+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "RDV Reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription("Notification channel description");
+            // register the channel
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
+    public void showNotification() {
+        Intent intent= new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent=
+                PendingIntent.getActivity(this,REQUEST_CODE,intent,PendingIntent.FLAG_ONE_SHOT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("RDV Alarm")
+                .setContentText("A RDV is close !")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
+        notificationManager.notify(NOTIFICATION_ID, notifBuilder.build());
+    }
+
+    public void compareTime() throws ParseException {
+        Adapter ad = this.lvMoments.getAdapter();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm");
+        int nbMoments = ad.getCount();
+        Calendar c = Calendar.getInstance();
+        for(int i=0;i<nbMoments;i++){
+            Moment m = (Moment) ad.getItem(i);
+
+            String targetDate = m.getDate() + " " + m.getTime();
+            Date d = dateFormat.parse(targetDate); // target date
+
+            int r = Integer.parseInt(m.getReminder().charAt(0)+""); // the number of days reminder
+
+            c.setTime(d);
+            c.add(Calendar.HOUR, -24*r); // turn back r days in time
+
+            Date totalDate = Calendar.getInstance().getTime();
+            Date currentTime = dateFormat.parse(totalDate.toString()); // current date
+            Date currentDate = (totalDate); // current time
+
+            if(currentDate.after(totalDate)){
+                showNotification();
+            }
+        }
+    }
 
 }

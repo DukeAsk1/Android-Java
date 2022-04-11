@@ -21,6 +21,6 @@
     <string-array name="reminder">
         <item>1 day before</item>
         <item>2 days before</item>
-        <item>1 week before</item>
+        <item>7 days before</item>
     </string-array>
 </resources>
