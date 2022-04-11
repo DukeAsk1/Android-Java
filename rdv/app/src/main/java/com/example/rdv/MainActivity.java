@@ -1,7 +1,5 @@
 package com.example.rdv;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -9,41 +7,30 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.SearchManager;
-import android.app.TimePickerDialog;
-import android.content.Context;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
-
-
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     ListView lvMoments; // list of existing events
     private DatabaseHelper myHelper; // database
+
+    // permissions
+    private static final int WRITE_CALENDAR_PERMISSION_CODE = 62;
+    private static final int PHONE_PERMISSION_CODE = 30;
+    private static final int CONTACT_PERMISSION_CODE = 1;
 
 
     @Override
@@ -72,12 +59,22 @@ public class MainActivity extends AppCompatActivity {
                 String reminderItem= ((TextView)view.findViewById(R.id.tvReminder)).getText().toString();
                 String commentsItem= ((TextView)view.findViewById(R.id.comments)).getText().toString();
                 Moment pMoment= new Moment(Long.parseLong(idItem),categoryItem,titleItem,contactItem,numItem,locationItem, dateItem,timeItem,reminderItem,commentsItem);
-                Intent intent = new Intent(getApplicationContext(), MomentDetails.class);
-                intent.putExtra("SelectedMoment",pMoment);
-                intent.putExtra("fromAdd",false);
-                startActivity(intent);
+
+                RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+
+                if (fragment != null && fragment.isInLayout()) {
+                    fragment.setMoment(pMoment,false);
+                    fragment.chargeAll();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), RdvDetailsActivity.class);
+                    intent.putExtra("SelectedMoment",pMoment);
+                    intent.putExtra("fromAdd",false);
+                    startActivity(intent);
+                }
+
             }
         });
+        requestReadContactPermissions(); // request for permissions
     }
 
 
@@ -104,10 +101,18 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.new_moment:{
-                Intent intent=new Intent(this,MomentDetails.class);
-                intent.putExtra("fromAdd", true);
-                startActivity(intent);
-                return true;
+                RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+
+                if (fragment != null && fragment.isInLayout()) {
+                    fragment.setMoment(null,true);
+                    fragment.chargeAll();
+                } else {
+                    Intent intent=new Intent(this, RdvDetailsActivity.class);
+                    intent.putExtra("fromAdd", true);
+                    startActivity(intent);
+                    return true;
+                }
+
             }
             case R.id.search: {
                 Toast.makeText(this, "Search", Toast.LENGTH_LONG).show();
@@ -170,6 +175,82 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         lvMoments.setAdapter(adapter);
     }
+
+    ////////////////// PERMISSIONS /////////////////////
+
+    public void requestReadContactPermissions()
+    {
+
+        // READ CONTACTS PERMISSION
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) !=
+                PackageManager.PERMISSION_GRANTED)
+        {
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(this, new String[]
+                    {Manifest.permission.READ_CONTACTS}, CONTACT_PERMISSION_CODE);
+        }
+
+
+    }
+
+    public void requestWriteCalendarPermissions()
+    {
+        // WRITE CALENDAR PERMISSION
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) !=
+                PackageManager.PERMISSION_GRANTED)
+        {
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(this, new String[]
+                    {Manifest.permission.WRITE_CALENDAR}, WRITE_CALENDAR_PERMISSION_CODE);
+        }
+    }
+
+    public void requestCallPhonePermissions()
+    {
+
+        // CALL PHONE PERMISSION
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) !=
+                PackageManager.PERMISSION_GRANTED)
+        {
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(this, new String[]
+                    {Manifest.permission.CALL_PHONE}, PHONE_PERMISSION_CODE);
+        }
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case CONTACT_PERMISSION_CODE:{
+                if (grantResults.length >0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Permission denied...", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    requestWriteCalendarPermissions();
+                }
+            }
+
+            case WRITE_CALENDAR_PERMISSION_CODE:{
+                if (grantResults.length >0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Permission denied...", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    requestCallPhonePermissions();
+                }
+            }
+
+            case PHONE_PERMISSION_CODE:{
+                if (grantResults.length >0 && grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this, "Permission denied...", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
 
 
 }

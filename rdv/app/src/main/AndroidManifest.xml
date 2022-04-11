@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.rdv.MomentDetails"
+            android:name=".RdvDetailsActivity"
             android:exported="true"
             android:label="RDV Details" >
         </activity>
     </application>
-    <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"></uses-permission>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
