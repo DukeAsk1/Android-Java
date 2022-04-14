@@ -141,10 +141,25 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
-            case R.id.search: {
+            case R.id.from_share:{
+                RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+
+                if (fragment != null && fragment.isInLayout()) {
+                    fragment.setMoment(null,true);
+                    fragment.chargeAll();
+                } else {
+                    Intent intent=new Intent(this, FromShareActivity.class);
+                    intent.putExtra("fromAdd", true);
+                    startActivity(intent);
+                    return true;
+                }
+
+            }
+
+            /*case R.id.search: {
                 Toast.makeText(this, "Search", Toast.LENGTH_LONG).show();
                 return true;
-            }
+            }*/
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -236,6 +251,41 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    // cancel event
+    public void onCancelClick(View v) {
+        RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+        fragment.onCancelClick(v);
+    }
+    public void saveMoment(View v){
+        RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+        fragment.saveMoment(v);
+    }
+
+    public void pickContact(View v){
+        RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+        fragment.pickContact(v);
+    }
+
+    public void callNumber(View v){
+        RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+        fragment.callNumber(v);
+    }
+
+    public void launchMaps(View v){
+        RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+        fragment.launchMaps(v);
+    }
+
+    public void pickDate(View v){
+        RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+        fragment.pickDate(v);
+    }
+
+    public void pickTime(View v){
+        RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+        fragment.pickTime(v);
     }
 
     ////////////////// PERMISSIONS /////////////////////
@@ -385,18 +435,21 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < nbMoments; i++){
 
             String targetDate = dateArray[i] + " " + timeArray[i];
-            Date d = dateFormat.parse(targetDate); // target date
+            Date rdvDate = dateFormat.parse(targetDate); // target date
+
+            Date currentTime = Calendar.getInstance().getTime();
 
             int r = Integer.parseInt(reminderArray[i].charAt(0)+""); // the number of days reminder
 
-            c.setTime(d);
-            c.add(Calendar.HOUR, 24*r); // turn back r days in time
+            c.setTime(rdvDate);
+            c.add(Calendar.HOUR, -24*r); // turn back r days in time
 
-            Date totalDate = Calendar.getInstance().getTime();
+            Date totalDate = c.getTime();
             //Date limitDate = dateFormat.parse(totalDate.toString());
             // current date parsed the right way
 
-            if(totalDate.after(d)){
+            if(currentTime.after(totalDate) && !currentTime.after(rdvDate))
+                 {
                 Log.d("test",""+i);
                 showNotification();
             }

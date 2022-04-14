@@ -6,7 +6,11 @@
         android:title="Ajouter"
         android:icon="@drawable/new_moment_icon"
         app:showAsAction="ifRoom"/>
+
     <item
-        android:id="@+id/search"
-        android:title="Rechercher"/>
+        android:id="@+id/from_share"
+        android:title="import share"
+        android:icon="@drawable/import_share"
+        app:showAsAction="ifRoom"></item>
+
 </menu>

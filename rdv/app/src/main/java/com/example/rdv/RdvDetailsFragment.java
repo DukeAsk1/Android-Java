@@ -162,7 +162,7 @@ public class RdvDetailsFragment extends Fragment {
         if(!fromAdd){
             //Bundle b= intent.getExtras();
             //Moment selectedMoment= b.getParcelable("SelectedMoment");
-            //tvId.setText(String.valueOf(selectedMoment.getId()));
+            tvId.setText(String.valueOf(a_Moment.getId()));
             spCategory.setSelection(adapter.getPosition(a_Moment.getCategory()));
             etTitle.setText(a_Moment.getTitle());
             etContact.setText(a_Moment.getContact());
@@ -301,9 +301,17 @@ public class RdvDetailsFragment extends Fragment {
 
     // cancel event
     public void onCancelClick(View v) {
-        //finish();
+
         Intent main = new Intent(getActivity(),MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(main);
+        tvId.setText("");
+        etTitle.setText("");
+        etContact.setText("");
+        etNum.setText("");
+        etLocation.setText("");
+        etDate.setText("");
+        etTime.setText("");
+        etComments.setText("");
     }
 
 
