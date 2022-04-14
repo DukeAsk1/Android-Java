@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,6 +36,7 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -57,8 +59,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         myHelper = new DatabaseHelper(this);
         myHelper.open();
+
+
+
+        requestReadContactPermissions(); // request for permissions
+        createNotificationChannel(); // create a notification channel
 
         lvMoments = (ListView) findViewById(R.id.lvMoments);
         lvMoments.setEmptyView(findViewById(R.id.tvEmpty));
@@ -94,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        requestReadContactPermissions(); // request for permissions
-        createNotificationChannel(); // create a notification channel
     }
 
 
@@ -195,14 +201,14 @@ public class MainActivity extends AppCompatActivity {
         SimpleCursorAdapter adapter= new SimpleCursorAdapter(this,R.layout.rdv_item_menu,c,from,to,0);
         adapter.notifyDataSetChanged();
         lvMoments.setAdapter(adapter);
-        /*
+
         try {
             compareTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-         */
+
     }
 
     ////////////////// PERMISSIONS /////////////////////
@@ -309,28 +315,65 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void compareTime() throws ParseException {
-        Adapter ad = this.lvMoments.getAdapter();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm");
-        int nbMoments = ad.getCount();
-        Calendar c = Calendar.getInstance();
-        for(int i=0;i<nbMoments;i++){
-            Moment m = (Moment) ad.getItem(i);
+        ArrayList<String> mArrayList = new ArrayList<String>();
+        String[] dateArray;
+        String[] timeArray;
+        String[] reminderArray;
 
-            String targetDate = m.getDate() + " " + m.getTime();
+        /// DATE
+        Cursor cur = myHelper.getAllMoments();
+        int id = cur.getColumnIndex(myHelper.MDATE);
+        for(cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            mArrayList.add(cur.getString(id));
+        }
+        dateArray = mArrayList.toArray(new String[0]);
+        mArrayList.clear();
+        cur.close();
+
+        /// TIME
+        cur = myHelper.getAllMoments();
+        id = cur.getColumnIndex(myHelper.MTIME);
+        for(cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            mArrayList.add(cur.getString(id));
+        }
+        timeArray = mArrayList.toArray(new String[0]);
+        mArrayList.clear();
+        cur.close();
+
+        /// REMINDER
+        cur = myHelper.getAllMoments();
+        id = cur.getColumnIndex(myHelper.REMINDER);
+        for(cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            mArrayList.add(cur.getString(id));
+        }
+        reminderArray = mArrayList.toArray(new String[0]);
+        mArrayList.clear();
+        cur.close();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm");
+        int nbMoments = timeArray.length;
+        Calendar c = Calendar.getInstance();
+
+        /// NOTIF
+        for(int i = 0; i < nbMoments; i++){
+
+            String targetDate = dateArray[i] + " " + timeArray[i];
             Date d = dateFormat.parse(targetDate); // target date
 
-            int r = Integer.parseInt(m.getReminder().charAt(0)+""); // the number of days reminder
+            int r = Integer.parseInt(reminderArray[i].charAt(0)+""); // the number of days reminder
 
             c.setTime(d);
-            c.add(Calendar.HOUR, -24*r); // turn back r days in time
+            c.add(Calendar.HOUR, 24*r); // turn back r days in time
 
             Date totalDate = Calendar.getInstance().getTime();
-            Date currentTime = dateFormat.parse(totalDate.toString()); // current date
-            Date currentDate = (totalDate); // current time
+            //Date limitDate = dateFormat.parse(totalDate.toString());
+            // current date parsed the right way
 
-            if(currentDate.after(totalDate)){
+            if(totalDate.after(d)){
+                Log.d("test",""+i);
                 showNotification();
             }
+
         }
     }
 
