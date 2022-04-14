@@ -168,6 +168,33 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (item.getItemId()==R.id.share){
+            Moment pShare = myHelper.share(info.id);
+            String rdvInfo = "";
+            rdvInfo+= pShare.getCategory();
+            rdvInfo+="\n";
+            rdvInfo+= pShare.getTitle();
+            rdvInfo+="\n";
+            rdvInfo+= pShare.getContact();
+            rdvInfo+="\n";
+            rdvInfo+= pShare.getNum();
+            rdvInfo+="\n";
+            rdvInfo+= pShare.getLocation();
+            rdvInfo+="\n";
+            rdvInfo+= pShare.getDate();
+            rdvInfo+="\n";
+            rdvInfo+= pShare.getTime();
+            rdvInfo+="\n";
+            rdvInfo+= pShare.getReminder();
+            rdvInfo+="\n";
+            rdvInfo+= pShare.getComments();
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, rdvInfo);
+            sendIntent.setType("text/plain");
+            //startActivity(sendIntent);
+            startActivity(Intent.createChooser(sendIntent, "Share App"));
+
+            /*
             final ListView lv = (ListView) findViewById(R.id.lvMoments);
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> myAdapter, View myView, int pos, long mylng) {
@@ -181,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.id.item_menu));
             sendIntent.setType("text/plain");
             //startActivity(sendIntent);
-            startActivity(Intent.createChooser(sendIntent, "Share App"));
+            startActivity(Intent.createChooser(sendIntent, "Share App"));*/
             return true;
         }
         return super.onContextItemSelected(item);

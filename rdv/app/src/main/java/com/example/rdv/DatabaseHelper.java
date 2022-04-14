@@ -6,7 +6,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Parcel;
+import android.util.Log;
 
+import java.util.ArrayList;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -77,6 +80,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void delete(long _id)
     {
         database.delete(TABLE_NAME, _ID + "=" + _id, null);
+    }
+    public Moment share(long _id){
+        Moment pMoment = new Moment();
+        Cursor cur = database.rawQuery("Select * from "+ TABLE_NAME+" where "+this._ID+" =" + _id + "", null);
+        for(cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {
+            Log.d("Test",cur.getString(0));
+            Log.d("Test",cur.getString(1));
+            pMoment.setId(Long.parseLong(cur.getString(0)));
+            pMoment.setCategory(cur.getString(1));
+            pMoment.setTitle(cur.getString(2));
+            pMoment.setContact(cur.getString(3));
+            pMoment.setNum(cur.getString(4));
+            pMoment.setLocation(cur.getString(5));
+            pMoment.setDate(cur.getString(6));
+            pMoment.setTime(cur.getString(7));
+            pMoment.setReminder(cur.getString(8));
+            pMoment.setComments(cur.getString(9));
+
+
+        }
+        return  pMoment;
     }
 
     public int update(Moment moment) {

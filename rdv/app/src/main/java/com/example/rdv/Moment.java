@@ -20,6 +20,7 @@ public class Moment implements Parcelable {
 
 
     public Moment() {
+
     }
 
     public Moment(String category, String title, String contact, String num, String location, String date,
