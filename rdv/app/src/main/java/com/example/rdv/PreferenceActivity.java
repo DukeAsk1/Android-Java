@@ -51,7 +51,9 @@ public class PreferenceActivity extends AppCompatActivity {
         initWidgets();
         loadSharedPreferences();
         initSwitchListener();
-        startMusic();
+
+        if(myService == null)
+            startMusic();
 
 
         if(manager.isMusicActive()){
