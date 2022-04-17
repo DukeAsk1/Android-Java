@@ -23,16 +23,17 @@ public class MusicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                player = MediaPlayer.create(getApplicationContext(),R.raw.lofi);
-                player.setLooping(true);
-                loaded = true;
-            }
-        });
-        t.start();
-
+        if(player==null) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    player = MediaPlayer.create(getApplicationContext(), R.raw.lofi);
+                    player.setLooping(true);
+                    loaded = true;
+                }
+            });
+            t.start();
+        }
         return START_STICKY;
     }
 
