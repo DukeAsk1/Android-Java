@@ -12,7 +12,17 @@
     <string name="lblComments">Détails</string>
     <string name="btnSave">Sauvegarder</string>
     <string name="btnCancel">Annuler</string>
-
+    <string name="MusicOn">Joue la Musique</string>
+    <string name='MusicOff'>Pause la Musique</string>
+    <string name='MusicStop'>Music Stopped</string>
+    <string name='StopMusic'>Mute the Music</string>
+    <string name='PlayMusic'>Unmute the Music</string>
+    <string name="darkTheme">Dark Theme</string>
+    <string name="lightTheme">Light Theme</string>
+    <string name="rdvalarm">RDV Alarm</string>
+    <string name="rdvmsg">A RDV is coming! Make sure to be on time! :)</string>
+    <string name="rdvpostalarm">Post Date Alarm</string>
+    <string name="rdvpostmsg">A RDV has passed the due date !</string>
     <string-array name="spinner">
         <item>Médical</item>
         <item>Réunion</item>

@@ -19,6 +19,10 @@
     <string name='PlayMusic'>Unmute the Music</string>
     <string name="darkTheme">Dark Theme</string>
     <string name="lightTheme">Light Theme</string>
+    <string name="rdvalarm">RDV Alarm</string>
+    <string name="rdvmsg">A RDV is coming! Make sure to be on time! :)</string>
+    <string name="rdvpostalarm">Post Date Alarm</string>
+    <string name="rdvpostmsg">A RDV has passed the due date !</string>
     <string-array name="spinner">
         <item>Medical</item>
         <item>Meeting</item>

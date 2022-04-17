@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     // notifications
     static String CHANNEL_ID= "channel_notif";
+    static String POST_ID="post_notif";
     static int NOTIFICATION_ID=100;
     static int REQUEST_CODE= 200;
 
@@ -463,12 +464,27 @@ public class MainActivity extends AppCompatActivity {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("RDV Alarm")
-                .setContentText("A RDV is close !")
+                .setContentTitle(getString(R.string.rdvalarm))
+                .setContentText(getString(R.string.rdvmsg))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent);
         notificationManager.notify(NOTIFICATION_ID, notifBuilder.build());
     }
+
+    public void showPostNotification() {
+        Intent intent= new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent=
+                PendingIntent.getActivity(this,REQUEST_CODE,intent,PendingIntent.FLAG_ONE_SHOT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(getString(R.string.rdvpostalarm))
+                .setContentText(getString(R.string.rdvpostmsg))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent);
+        notificationManager.notify(NOTIFICATION_ID, notifBuilder.build());
+    }
+
 
     public void compareTime() throws ParseException {
         ArrayList<String> mArrayList = new ArrayList<String>();
@@ -531,6 +547,9 @@ public class MainActivity extends AppCompatActivity {
                  {
                 Log.d("test",""+i);
                 showNotification();
+            }
+            if(currentTime.after(rdvDate)){
+                showPostNotification();
             }
 
         }
