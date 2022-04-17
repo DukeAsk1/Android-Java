@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int CONTACT_PERMISSION_CODE = 1;
 
     // notifications
-    static String CHANNEL_ID= "channel_notif";
-    static String POST_ID="post_notif";
+    static String CHANNEL_NOTIF_ID= "channel_notif";
+    static String CHANNEL_POST_ID="channel_post";
     static int NOTIFICATION_ID=100;
     static int REQUEST_CODE= 200;
 
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         loadSharedPreferences();
 
         requestReadContactPermissions(); // request for permissions
-        createNotificationChannel(); // create a notification channel
+        createNotificationChannels(); // create a notification channel
 
         chargeData();
         registerForContextMenu(lvMoments);
@@ -137,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void createNotificationChannels() {
+        createNotificationChannel(CHANNEL_NOTIF_ID,getString(R.string.rdvalarm),getString(R.string.rdvmsg));
+        createNotificationChannel(CHANNEL_POST_ID,getString(R.string.rdvpostalarm),getString(R.string.rdvpostmsg));
     }
 
 
@@ -444,42 +449,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //////////////// NOTIFICATIONS //////////////////
-    private void createNotificationChannel() {
+    private void createNotificationChannel(String channel_id, CharSequence name, String description) {
         // Create a NotificationChannel, only for API 26+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "RDV Reminder";
+
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription("Notification channel description");
+            NotificationChannel channel = new NotificationChannel(channel_id, name, importance);
+            channel.setDescription(description);
             // register the channel
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
 
-    public void showNotification() {
+    public void showNotification(String channel_id, String title, String text) {
         Intent intent= new Intent(this, MainActivity.class);
         PendingIntent pendingIntent=
                 PendingIntent.getActivity(this,REQUEST_CODE,intent,PendingIntent.FLAG_ONE_SHOT);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, channel_id)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(getString(R.string.rdvalarm))
-                .setContentText(getString(R.string.rdvmsg))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent);
-        notificationManager.notify(NOTIFICATION_ID, notifBuilder.build());
-    }
-
-    public void showPostNotification() {
-        Intent intent= new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent=
-                PendingIntent.getActivity(this,REQUEST_CODE,intent,PendingIntent.FLAG_ONE_SHOT);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        NotificationCompat.Builder notifBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(getString(R.string.rdvpostalarm))
-                .setContentText(getString(R.string.rdvpostmsg))
+                .setContentTitle(title)
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent);
         notificationManager.notify(NOTIFICATION_ID, notifBuilder.build());
@@ -546,10 +537,10 @@ public class MainActivity extends AppCompatActivity {
             if(currentTime.after(totalDate) && !currentTime.after(rdvDate))
                  {
                 Log.d("test",""+i);
-                showNotification();
+                showNotification(CHANNEL_NOTIF_ID,getString(R.string.rdvalarm),getString(R.string.rdvmsg));
             }
             if(currentTime.after(rdvDate)){
-                showPostNotification();
+                showNotification(CHANNEL_POST_ID,getString(R.string.rdvpostalarm),getString(R.string.rdvpostmsg));
             }
 
         }

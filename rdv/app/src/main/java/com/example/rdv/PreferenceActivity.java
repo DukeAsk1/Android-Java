@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -23,6 +24,7 @@ public class PreferenceActivity extends AppCompatActivity {
     Switch background_color;
 
     Button play_pause;
+    AudioManager manager;
 
     private MusicService myService = null;
     private ServiceConnection myServiceConnection = new ServiceConnection(){
@@ -44,13 +46,14 @@ public class PreferenceActivity extends AppCompatActivity {
         setContentView(R.layout.preferences);
 
         settings = (UserSettings) getApplication();
+        manager = (AudioManager)this.getSystemService(Context.AUDIO_SERVICE);
 
         initWidgets();
         loadSharedPreferences();
         initSwitchListener();
 
 
-        if(isPlaying()){
+        if(manager.isMusicActive()){
             play_pause.setText(R.string.MusicOff);
         }
         else{
@@ -62,7 +65,7 @@ public class PreferenceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(!isPlaying()){
+                if(!manager.isMusicActive()){
                     startMusic();
                 }
                 else{
@@ -142,9 +145,5 @@ public class PreferenceActivity extends AppCompatActivity {
     protected void onStop(){
         super.onStop();
         stopMusic();
-    }
-
-    public boolean isPlaying(){
-        return !(myService == null);
     }
 }
