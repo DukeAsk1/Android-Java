@@ -27,12 +27,18 @@ public class MusicService extends Service {
             public void run() {
                 player = MediaPlayer.create(getApplicationContext(),R.raw.lofi);
                 player.setLooping(true);
-                player.start();
             }
         });
         t.start();
 
         return START_STICKY;
+    }
+
+    public void pauseMusic(){
+        player.pause();
+    }
+    public void playMusic(){
+        player.start();
     }
 
     @Override

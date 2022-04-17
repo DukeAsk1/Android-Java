@@ -51,6 +51,7 @@ public class PreferenceActivity extends AppCompatActivity {
         initWidgets();
         loadSharedPreferences();
         initSwitchListener();
+        startMusic();
 
 
         if(manager.isMusicActive()){
@@ -59,20 +60,6 @@ public class PreferenceActivity extends AppCompatActivity {
         else{
             play_pause.setText(R.string.MusicOn);
         }
-
-
-        play_pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(!manager.isMusicActive()){
-                    startMusic();
-                }
-                else{
-                    stopMusic();
-                }
-            }
-        });
 
 
     }
@@ -95,6 +82,17 @@ public class PreferenceActivity extends AppCompatActivity {
                 updateView();
             }
         });
+    }
+
+    public void onMusicClick(View v){
+        if(!manager.isMusicActive()){
+            playMusic();
+            play_pause.setText(R.string.MusicOff);
+        }
+        else{
+            pauseMusic();
+            play_pause.setText(R.string.MusicOn);
+        }
     }
 
     private void updateView() {
@@ -132,6 +130,14 @@ public class PreferenceActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(getApplicationContext(), MusicService.class);
         startService(serviceIntent);
         bindService(serviceIntent,myServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    public void pauseMusic(){
+        myService.pauseMusic();
+    }
+
+    public void playMusic(){
+        myService.playMusic();
     }
 
 
