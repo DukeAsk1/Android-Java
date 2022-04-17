@@ -12,6 +12,7 @@ public class MusicService extends Service {
 
     MediaPlayer player;
     IBinder binder = new MyActivityBinder();
+    public boolean loaded = false;
 
 
     @Nullable
@@ -27,6 +28,7 @@ public class MusicService extends Service {
             public void run() {
                 player = MediaPlayer.create(getApplicationContext(),R.raw.lofi);
                 player.setLooping(true);
+                loaded = true;
             }
         });
         t.start();
