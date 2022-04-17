@@ -4,11 +4,15 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +80,20 @@ public class RdvDetailsActivity extends AppCompatActivity {
         }
     };
 
+    // Music
+    private MusicService myService;
+    private ServiceConnection myServiceConnection = new ServiceConnection(){
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service){
+            myService  =((MusicService.MyActivityBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name){
+            myService = null;
+        }
+    };
+
 
     // buttons
     ImageButton btnPickTime;
@@ -105,8 +123,11 @@ public class RdvDetailsActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.rdv_details);
+
+        Intent serviceIntent = new Intent(this, MusicService.class);
+        bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
+
         etTitle = (EditText) findViewById(R.id.etTitle);
         etContact = (EditText) findViewById(R.id.etContact);
         etNum = (EditText) findViewById(R.id.etNum);
@@ -135,7 +156,7 @@ public class RdvDetailsActivity extends AppCompatActivity {
         myHelper.open();
         Intent intent = getIntent();
 
-        fromAdd= intent.getBooleanExtra("fromAdd",false);
+        fromAdd = intent.getBooleanExtra("fromAdd",false);
         if(!fromAdd){
             Bundle b= intent.getExtras();
             Moment selectedMoment= b.getParcelable("SelectedMoment");

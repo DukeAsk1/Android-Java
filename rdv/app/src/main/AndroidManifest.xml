@@ -3,12 +3,14 @@
     package="com.example.rdv">
 
     <application
+        android:name=".UserSettings"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="RDVManager"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rdv">
+        <service android:name=".MusicService" android:enabled="true"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

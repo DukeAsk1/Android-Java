@@ -4,6 +4,7 @@ import static java.security.AccessController.getContext;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -15,12 +16,17 @@ import android.app.Fragment;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -56,22 +62,42 @@ public class MainActivity extends AppCompatActivity {
     static int NOTIFICATION_ID=100;
     static int REQUEST_CODE= 200;
 
+    // User settings
+    private UserSettings settings;
+
+    // Music
+    private MusicService myService;
+    private ServiceConnection myServiceConnection = new ServiceConnection(){
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service){
+            myService  =((MusicService.MyActivityBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name){
+            myService = null;
+        }
+    };
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myHelper = new DatabaseHelper(this);
-        myHelper.open();
+        Intent serviceIntent = new Intent(this, MusicService.class);
+        bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
 
+        settings = (UserSettings) getApplication();
+        initWidgets();
 
+        loadSharedPreferences();
 
         requestReadContactPermissions(); // request for permissions
         createNotificationChannel(); // create a notification channel
 
-        lvMoments = (ListView) findViewById(R.id.lvMoments);
-        lvMoments.setEmptyView(findViewById(R.id.tvEmpty));
         chargeData();
         registerForContextMenu(lvMoments);
 
@@ -110,6 +136,32 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+
+    private void initWidgets(){
+
+        myHelper = new DatabaseHelper(this);
+        myHelper.open();
+        lvMoments = (ListView) findViewById(R.id.lvMoments);
+        lvMoments.setEmptyView(findViewById(R.id.tvEmpty));
+    }
+
+    private void updateView() {
+
+        if(settings.getCustomTheme().equals(UserSettings.DARK_THEME)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    private void loadSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences(UserSettings.PREFERENCES, MODE_PRIVATE);
+        String theme = sharedPreferences.getString(UserSettings.CUSTOM_THEME, UserSettings.LIGHT_THEME);
+        settings.setCustomTheme(theme);
+        updateView();
     }
 
 
@@ -171,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment.chargeAll();
                 } else {
                     Intent intent=new Intent(this, PreferenceActivity.class);
-                    intent.putExtra("fromAdd", true);
+                    intent.putExtra("mediaPlayer", true);
                     startActivity(intent);
                     return true;
                 }
