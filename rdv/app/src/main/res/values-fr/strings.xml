@@ -12,6 +12,7 @@
     <string name="lblComments">Détails</string>
     <string name="btnSave">Sauvegarder</string>
     <string name="btnCancel">Annuler</string>
+
     <string-array name="spinner">
         <item>Médical</item>
         <item>Réunion</item>

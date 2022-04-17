@@ -28,6 +28,10 @@
             android:exported="true"
             android:label="Import a Shared RDV" >
         </activity>
+        <activity android:name=".PreferenceActivity"
+            android:exported="true"
+            android:label='User Settings Preferences'>
+        </activity>
     </application>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>

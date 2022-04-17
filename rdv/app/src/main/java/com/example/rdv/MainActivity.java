@@ -18,6 +18,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -102,6 +104,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+
+
+
     }
 
 
@@ -155,6 +163,23 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+            case R.id.preferences:{
+                RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+
+                if (fragment != null && fragment.isInLayout()) {
+                    fragment.setMoment(null,true);
+                    fragment.chargeAll();
+                } else {
+                    Intent intent=new Intent(this, PreferenceActivity.class);
+                    intent.putExtra("fromAdd", true);
+                    startActivity(intent);
+                    return true;
+                }
+
+            }
+
+
+
 
             /*case R.id.search: {
                 Toast.makeText(this, "Search", Toast.LENGTH_LONG).show();
@@ -287,6 +312,8 @@ public class MainActivity extends AppCompatActivity {
         RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
         fragment.pickTime(v);
     }
+
+
 
     ////////////////// PERMISSIONS /////////////////////
 

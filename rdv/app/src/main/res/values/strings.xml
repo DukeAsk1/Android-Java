@@ -12,6 +12,13 @@
     <string name="lblComments">Comment</string>
     <string name="btnSave">Save</string>
     <string name="btnCancel">Cancel</string>
+    <string name="MusicOn">Play the Music</string>
+    <string name='MusicOff'>Pause the Music</string>
+    <string name='MusicStop'>Music Stopped</string>
+    <string name='StopMusic'>Mute the Music</string>
+    <string name='PlayMusic'>Unmute the Music</string>
+    <string name="darkTheme">Dark Theme</string>
+    <string name="lightTheme">Light Theme</string>
     <string-array name="spinner">
         <item>Medical</item>
         <item>Meeting</item>

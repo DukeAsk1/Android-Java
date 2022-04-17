@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/new_moment"
-        android:title="Add"
+        android:title="Add a RDV"
         android:icon="@drawable/new_moment_icon"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/from_share"
-        android:title="import share"
+        android:title="Import Shared RDV"
         android:icon="@drawable/import_share"
         app:showAsAction="ifRoom"></item>
+
+
+    <item
+        android:id="@+id/preferences"
+        android:title="Setting Preferences"
+        app:showAsAction="ifRoom"
+        />
+
+
 </menu>
