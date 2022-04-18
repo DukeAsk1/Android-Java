@@ -15,6 +15,7 @@ public class MusicService extends Service {
     public boolean loaded = false;
 
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent){
@@ -55,6 +56,8 @@ public class MusicService extends Service {
             return MusicService.this;
         }
     }
+
+
 
 }
 
