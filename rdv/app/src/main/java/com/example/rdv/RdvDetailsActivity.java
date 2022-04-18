@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,6 +115,18 @@ public class RdvDetailsActivity extends AppCompatActivity {
                     if (c.moveToFirst()) {
                         TextView tvName= findViewById(R.id.etContact);
                         String name = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                        String contactID = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                        String hasPhone = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+                        if(hasPhone.equalsIgnoreCase("1")){
+                            TextView tvNum = findViewById(R.id.etNum);
+                            Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID  +" = "+contactID,null,null);
+                            phones.moveToFirst();
+                            String contactNumber = phones.getString(phones.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            tvNum.setText(contactNumber);
+                        }
+
                         tvName.setText(name);
                     }
                 }
