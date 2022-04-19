@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     // notifications
     static String CHANNEL_NOTIF_ID= "channel_notif";
     static String CHANNEL_POST_ID="channel_post";
+    static String CHANNEL_NOW_ID="channel_now";
     static int NOTIFICATION_ID=100;
     static int REQUEST_CODE= 200;
 
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
     private void createNotificationChannels() {
         createNotificationChannel(CHANNEL_NOTIF_ID,getString(R.string.rdvalarm),getString(R.string.rdvmsg));
         createNotificationChannel(CHANNEL_POST_ID,getString(R.string.rdvpostalarm),getString(R.string.rdvpostmsg));
+        createNotificationChannel(CHANNEL_NOW_ID,getString(R.string.rdvnowalarm),getString(R.string.rdvnowmsg));
     }
 
 
@@ -514,6 +516,7 @@ public class MainActivity extends AppCompatActivity {
         cur.close();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm");
+        SimpleDateFormat dayFormat = new SimpleDateFormat("MM-dd-yyyy");
         int nbMoments = timeArray.length;
         Calendar c = Calendar.getInstance();
 
@@ -524,6 +527,15 @@ public class MainActivity extends AppCompatActivity {
             Date rdvDate = dateFormat.parse(targetDate); // target date
 
             Date currentTime = Calendar.getInstance().getTime();
+            String targetDay = dateArray[i];
+            Date rdvDay = dayFormat.parse(targetDay);
+
+            int cMonth = Calendar.getInstance().get(Calendar.MONTH);
+            int cDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+            int cYear = Calendar.getInstance().get(Calendar.YEAR);
+            String cTime =  "" +cMonth + "-" + cDay + "-" + cYear+"";
+            int rDay = rdvDay.getYear();
+            int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
             int r = Integer.parseInt(reminderArray[i].charAt(0)+""); // the number of days reminder
 
@@ -541,6 +553,12 @@ public class MainActivity extends AppCompatActivity {
             }
             if(currentTime.after(rdvDate)){
                 showNotification(CHANNEL_POST_ID,getString(R.string.rdvpostalarm),getString(R.string.rdvpostmsg));
+                Log.d("test",""+targetDay);
+                Log.d("test",""+cTime);
+                Log.d("test",""+currentTime.toString());
+            }
+            if(cTime.equals(targetDay)){
+                showNotification(CHANNEL_NOW_ID,getString(R.string.rdvnowalarm),getString(R.string.rdvnowmsg));
             }
 
         }
