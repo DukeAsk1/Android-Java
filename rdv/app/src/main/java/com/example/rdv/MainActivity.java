@@ -214,31 +214,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
             case R.id.from_share:{
-                RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
 
-                if (fragment != null && fragment.isInLayout()) {
-                    fragment.setMoment(null,true);
-                    fragment.chargeAll();
-                } else {
-                    Intent intent=new Intent(this, FromShareActivity.class);
-                    intent.putExtra("fromAdd", true);
-                    startActivity(intent);
-                    return true;
-                }
+                Intent intent=new Intent(this, FromShareActivity.class);
+                intent.putExtra("fromAdd", true);
+                startActivity(intent);
+                return true;
+
 
             }
             case R.id.preferences:{
-                RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
 
-                if (fragment != null && fragment.isInLayout()) {
-                    fragment.setMoment(null,true);
-                    fragment.chargeAll();
-                } else {
-                    Intent intent=new Intent(this, PreferenceActivity.class);
-                    intent.putExtra("mediaPlayer", true);
-                    startActivity(intent);
-                    return true;
-                }
+                Intent intent=new Intent(this, PreferenceActivity.class);
+                intent.putExtra("mediaPlayer", true);
+                startActivity(intent);
+                return true;
+
 
             }
 

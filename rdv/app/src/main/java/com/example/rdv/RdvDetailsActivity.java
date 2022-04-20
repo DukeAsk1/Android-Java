@@ -181,7 +181,7 @@ public class RdvDetailsActivity extends AppCompatActivity {
             etLocation.setText(selectedMoment.getLocation());
             etDate.setText(selectedMoment.getDate());
             etTime.setText(selectedMoment.getTime());
-            spReminder.setSelection(reminder.getPosition(selectedMoment.getCategory()));
+            spReminder.setSelection(reminder.getPosition(selectedMoment.getReminder()));
             etComments.setText(selectedMoment.getComments());
         }
 

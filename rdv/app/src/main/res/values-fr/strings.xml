@@ -25,6 +25,8 @@
     <string name='rdvnowmsg'>C\'est l\'heure du RDV !  Allez-y !</string>
     <string name="rdvpostalarm">Alarme Post-RDV</string>
     <string name="rdvpostmsg">Un RDV a passé la date butoire !</string>
+    <string name='lockNotif'>Notifications verrouillées</string>
+    <string name='unlockNotif'>Notifications déverrouillées</string>
     <string-array name="spinner">
         <item>Médical</item>
         <item>Réunion</item>

@@ -2,19 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/play"
-        android:title="Play"
-        android:src="@drawable/play"
-        app:showAsAction="ifRoom"
-        />
-    <item
-        android:id="@+id/pause"
-        android:title="Pause"
-        android:src="@drawable/pause"
-        app:showAsAction="ifRoom"
-        />
-
-    <item
         android:id="@+id/new_moment"
         android:title="Add"
         android:icon="@drawable/new_moment_icon"
@@ -24,5 +11,10 @@
         android:title="import share"
         android:icon="@drawable/import_share"
         app:showAsAction="ifRoom"></item>
+    <item
+        android:id="@+id/preferences"
+        android:title="Setting Preferences"
+        app:showAsAction="ifRoom"
+        />
 
 </menu>

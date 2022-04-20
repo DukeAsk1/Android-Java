@@ -13,4 +13,10 @@
         android:icon="@drawable/import_share"
         app:showAsAction="ifRoom"></item>
 
+    <item
+        android:id="@+id/preferences"
+        android:title="Paramètres de préférence"
+        app:showAsAction="ifRoom"
+        />
+
 </menu>

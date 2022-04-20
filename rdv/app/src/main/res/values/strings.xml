@@ -25,7 +25,8 @@
     <string name='rdvnowmsg'>The Time of a RDV is now! Let\'s go !</string>
     <string name="rdvpostalarm">Post Date Alarm</string>
     <string name="rdvpostmsg">A RDV has passed the due date !</string>
-
+    <string name='lockNotif'>Lock Notifications</string>
+    <string name='unlockNotif'>Unlock Notifications</string>
     <string-array name="spinner">
         <item>Medical</item>
         <item>Meeting</item>

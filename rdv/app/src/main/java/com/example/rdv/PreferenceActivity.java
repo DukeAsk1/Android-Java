@@ -105,10 +105,14 @@ public class PreferenceActivity extends AppCompatActivity {
     }
 
     private void updateLockSwitch() {
-        if(settings.getCustomLocked() == UserSettings.LOCKED_YES)
+        if(settings.getCustomLocked() == UserSettings.LOCKED_YES) {
             lock_notification.setChecked(true);
-        else
+            //lock_notification.setText(R.string.lockNotif);
+        }
+        else{
             lock_notification.setChecked(false);
+            //lock_notification.setText(R.string.unlockNotif);
+        }
     }
 
     public void onMusicClick(View v){

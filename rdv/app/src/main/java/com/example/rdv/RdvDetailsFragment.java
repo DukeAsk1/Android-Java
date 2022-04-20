@@ -170,7 +170,7 @@ public class RdvDetailsFragment extends Fragment {
             etLocation.setText(a_Moment.getLocation());
             etDate.setText(a_Moment.getDate());
             etTime.setText(a_Moment.getTime());
-            spReminder.setSelection(reminder.getPosition(a_Moment.getCategory()));
+            spReminder.setSelection(reminder.getPosition(a_Moment.getReminder()));
             etComments.setText(a_Moment.getComments());
         }
 
