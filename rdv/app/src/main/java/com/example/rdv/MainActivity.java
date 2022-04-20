@@ -528,21 +528,24 @@ public class MainActivity extends AppCompatActivity {
 
             Date currentTime = Calendar.getInstance().getTime();
             String targetDay = dateArray[i];
-            Date rdvDay = dayFormat.parse(targetDay);
 
             int cMonth = Calendar.getInstance().get(Calendar.MONTH);
             int cDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
             int cYear = Calendar.getInstance().get(Calendar.YEAR);
             String cTime =  "" +cMonth + "-" + cDay + "-" + cYear+"";
-            int rDay = rdvDay.getYear();
-            int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+            Calendar rrdv = Calendar.getInstance();
+            rrdv.setTime(rdvDate);
+            int rMonth = rrdv.get(Calendar.MONTH);
+            int rDay = rrdv.get(Calendar.DAY_OF_MONTH);
+            int rYear = rrdv.get(Calendar.YEAR);
+            String rTime =  "" +rMonth + "-" + rDay + "-" + rYear+"";
 
             int r;
             try {
                 r = Integer.parseInt(reminderArray[i].charAt(0)+""); // the number of days reminder
             }catch (Exception e){
                 continue;
-                //r = Integer.parseInt(null);
             }
 
             c.setTime(rdvDate);
@@ -559,11 +562,8 @@ public class MainActivity extends AppCompatActivity {
             }
             if(currentTime.after(rdvDate)){
                 showNotification(CHANNEL_POST_ID,getString(R.string.rdvpostalarm),getString(R.string.rdvpostmsg));
-                Log.d("test",""+targetDay);
-                Log.d("test",""+cTime);
-                Log.d("test",""+currentTime.toString());
             }
-            if(cTime.equals(targetDay)){
+            if(cTime.equals(rTime)){
                 showNotification(CHANNEL_NOW_ID,getString(R.string.rdvnowalarm),getString(R.string.rdvnowmsg));
             }
 
