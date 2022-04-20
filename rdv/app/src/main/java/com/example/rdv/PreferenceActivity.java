@@ -22,6 +22,7 @@ public class PreferenceActivity extends AppCompatActivity {
     private UserSettings settings;
 
     Switch background_color;
+    Switch lock_notification;
 
     Button play_pause;
     AudioManager manager;
@@ -83,6 +84,31 @@ public class PreferenceActivity extends AppCompatActivity {
                 updateView();
             }
         });
+
+        lock_notification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if(checked){
+                    settings.setCustomLocked(UserSettings.LOCKED_YES);
+                }
+                else{
+                    settings.setCustomLocked(UserSettings.LOCKED_NO);
+                }
+
+                SharedPreferences.Editor editor = getSharedPreferences(UserSettings.PREFERENCES, MODE_PRIVATE).edit();
+                editor.putBoolean(UserSettings.LOCKED_CUSTOM, settings.getCustomLocked());
+                editor.apply();
+                updateLockSwitch();
+            }
+        });
+    }
+
+    private void updateLockSwitch() {
+        if(settings.getCustomLocked() == UserSettings.LOCKED_YES)
+            lock_notification.setChecked(true);
+        else
+            lock_notification.setChecked(false);
     }
 
     public void onMusicClick(View v){
@@ -94,6 +120,10 @@ public class PreferenceActivity extends AppCompatActivity {
             pauseMusic();
             play_pause.setText(R.string.MusicOn);
         }
+    }
+
+    public void onCloseButtonClick(View v){
+        finish();
     }
 
     private void updateView() {
@@ -118,11 +148,17 @@ public class PreferenceActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(UserSettings.PREFERENCES, MODE_PRIVATE);
         String theme = sharedPreferences.getString(UserSettings.CUSTOM_THEME, UserSettings.LIGHT_THEME);
         settings.setCustomTheme(theme);
+
+        boolean locked = sharedPreferences.getBoolean(UserSettings.LOCKED_CUSTOM, UserSettings.LOCKED_NO);
+        settings.setCustomLocked(locked);
+
+        updateLockSwitch();
         updateView();
     }
 
     private void initWidgets() {
         background_color = findViewById(R.id.background_color);
+        lock_notification = findViewById(R.id.lock_notifications);
         play_pause = findViewById(R.id.play_pause);
     }
 

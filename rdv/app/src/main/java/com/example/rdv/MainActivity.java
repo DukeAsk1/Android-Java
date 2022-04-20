@@ -169,6 +169,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(UserSettings.PREFERENCES, MODE_PRIVATE);
         String theme = sharedPreferences.getString(UserSettings.CUSTOM_THEME, UserSettings.LIGHT_THEME);
         settings.setCustomTheme(theme);
+
+        boolean locked = sharedPreferences.getBoolean(UserSettings.LOCKED_CUSTOM,UserSettings.LOCKED_NO);
+        settings.setCustomLocked(locked);
+
         updateView();
     }
 
@@ -329,12 +333,14 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         lvMoments.setAdapter(adapter);
 
-        try {
-            compareTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
+        if(!settings.getCustomLocked()) {
+            try {
+                compareTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
