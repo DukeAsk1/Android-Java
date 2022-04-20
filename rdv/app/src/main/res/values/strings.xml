@@ -33,6 +33,7 @@
         <item>Sport</item>
     </string-array>
     <string-array name="reminder">
+        <item>None</item>
         <item>1 day before</item>
         <item>2 days before</item>
         <item>7 days before</item>

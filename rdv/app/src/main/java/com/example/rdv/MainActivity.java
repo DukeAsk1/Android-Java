@@ -537,7 +537,13 @@ public class MainActivity extends AppCompatActivity {
             int rDay = rdvDay.getYear();
             int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
-            int r = Integer.parseInt(reminderArray[i].charAt(0)+""); // the number of days reminder
+            int r;
+            try {
+                r = Integer.parseInt(reminderArray[i].charAt(0)+""); // the number of days reminder
+            }catch (Exception e){
+                continue;
+                //r = Integer.parseInt(null);
+            }
 
             c.setTime(rdvDate);
             c.add(Calendar.HOUR, -24*r); // turn back r days in time

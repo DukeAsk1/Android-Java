@@ -17,14 +17,14 @@
     <string name='MusicStop'>Music Stopped</string>
     <string name='StopMusic'>Mute the Music</string>
     <string name='PlayMusic'>Unmute the Music</string>
-    <string name="darkTheme">Dark Theme</string>
-    <string name="lightTheme">Light Theme</string>
-    <string name="rdvalarm">RDV Alarm</string>
-    <string name="rdvmsg">A RDV is coming! Make sure to be on time! :)</string>
-    <string name="rdvnowalarm">RDV On Time Alarm</string>
-    <string name='rdvnowmsg'>The Time of a RDV is now! Let\'s go !</string>
-    <string name="rdvpostalarm">Post Date Alarm</string>
-    <string name="rdvpostmsg">A RDV has passed the due date !</string>
+    <string name="darkTheme">Thème Sombre</string>
+    <string name="lightTheme">Thème Clair</string>
+    <string name="rdvalarm">RDV Alarme</string>
+    <string name="rdvmsg">Un RDV est proche ! Soyez sûr d\'être à l\'heure ! :)</string>
+    <string name="rdvnowalarm">RDV Alarme Instantanée</string>
+    <string name='rdvnowmsg'>C\'est l\'heure du RDV !  Allez-y !</string>
+    <string name="rdvpostalarm">Alarme Post-RDV</string>
+    <string name="rdvpostmsg">Un RDV a passé la date butoire !</string>
     <string-array name="spinner">
         <item>Médical</item>
         <item>Réunion</item>
@@ -32,6 +32,7 @@
         <item>Sport</item>
     </string-array>
     <string-array name="reminder">
+        <item>Aucun</item>
         <item>1 jour avant</item>
         <item>2 jours avant</item>
         <item>7 jours avant</item>
