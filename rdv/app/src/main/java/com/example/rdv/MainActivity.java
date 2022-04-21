@@ -332,6 +332,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        RdvDetailsFragment fragment = (RdvDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.detailsFragment);
+        if(fragment != null && fragment.isInLayout()){
+            fragment.setMoment(null,true);
+            fragment.chargeAll();
+        }
+
+
     }
 
     // cancel event

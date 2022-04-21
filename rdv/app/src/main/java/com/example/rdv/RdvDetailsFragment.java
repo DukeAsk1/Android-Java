@@ -158,6 +158,17 @@ public class RdvDetailsFragment extends Fragment {
         myHelper.open();
         //Intent intent = getIntent();
 
+        tvId.setText(null);
+        spCategory.setSelection(0);
+        etTitle.setText(null);
+        etContact.setText(null);
+        etNum.setText(null);
+        etLocation.setText(null);
+        etDate.setText(null);
+        etTime.setText(null);
+        spReminder.setSelection(0);
+        etComments.setText(null);
+
         //fromAdd= intent.getBooleanExtra("fromAdd",false);
         if(!fromAdd){
             //Bundle b= intent.getExtras();
