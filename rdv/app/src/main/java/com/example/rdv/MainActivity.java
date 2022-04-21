@@ -209,8 +209,8 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent=new Intent(this, RdvDetailsActivity.class);
                     intent.putExtra("fromAdd", true);
                     startActivity(intent);
-                    return true;
                 }
+                return true;
 
             }
             case R.id.from_share:{
