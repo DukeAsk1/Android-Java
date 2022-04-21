@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     static String CHANNEL_POST_ID="channel_post";
     static String CHANNEL_NOW_ID="channel_now";
     static int NOTIFICATION_ID=100;
+    static int POST_ID=101;
+    static int NOW_ID=102;
     static int REQUEST_CODE= 200;
 
     // User settings
@@ -467,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showNotification(String channel_id, String title, String text) {
+    public void showNotification(String channel_id, int notif_id, String title, String text) {
         Intent intent= new Intent(this, MainActivity.class);
         PendingIntent pendingIntent=
                 PendingIntent.getActivity(this,REQUEST_CODE,intent,PendingIntent.FLAG_ONE_SHOT);
@@ -478,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent);
-        notificationManager.notify(NOTIFICATION_ID, notifBuilder.build());
+        notificationManager.notify(notif_id, notifBuilder.build());
     }
 
 
@@ -561,13 +563,13 @@ public class MainActivity extends AppCompatActivity {
             if(currentTime.after(totalDate) && !currentTime.after(rdvDate))
                  {
                 Log.d("test",""+i);
-                showNotification(CHANNEL_NOTIF_ID,getString(R.string.rdvalarm),getString(R.string.rdvmsg));
+                showNotification(CHANNEL_NOTIF_ID,NOTIFICATION_ID,getString(R.string.rdvalarm),getString(R.string.rdvmsg));
             }
             if(currentTime.after(rdvDate)){
-                showNotification(CHANNEL_POST_ID,getString(R.string.rdvpostalarm),getString(R.string.rdvpostmsg));
+                showNotification(CHANNEL_POST_ID,POST_ID,getString(R.string.rdvpostalarm),getString(R.string.rdvpostmsg));
             }
             if(cTime.equals(rTime)){
-                showNotification(CHANNEL_NOW_ID,getString(R.string.rdvnowalarm),getString(R.string.rdvnowmsg));
+                showNotification(CHANNEL_NOW_ID,NOW_ID,getString(R.string.rdvnowalarm),getString(R.string.rdvnowmsg));
             }
 
         }
